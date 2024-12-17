@@ -2,48 +2,39 @@
 #include <string>
 #include <sstream>
 
-std::string active(std::string& input){
+std::string active(const std::string& input){
+
+  std::string sequence;
+
+  int pos = 0;
 
   bool doing = true;
 
-  std::string::size_type ix = 0;
-  std::string::iterator it = input.end();
+  while((doing == true && input.find("don't()", pos) != std::string::npos) || (doing == false && input.find("do()", pos) != std::string::npos)){
 
-  while((doing == true && input.find("don't()") != std::string::npos) || (doing == false && input.find("do()", ix) != std::string::npos)){
+    
     if(doing == true){
-      if(it != input.end()){
 
-        input.erase(it,it+4);
-        ix = ix-*it;
-      } 
-      //std::cerr << input << "\n";
-      ix = input.find("don't()");
-      it = input.begin() + ix;
-      //std::cerr << *(it-1);
+      int newpos = input.find("don't()", pos);
+      sequence.append(input, pos, newpos-pos);//wonky
+
       doing = false;
+      pos = newpos+7;
     }
     else{
-      //doing == false
 
-      ix = input.find("do()");
-
-      input.erase(it, input.begin()+ix);
-
-      //std::cerr << input << "\n";
-
-      it = input.begin() + ix - *it;
-
+      int newpos = input.find("do()", pos);
       doing = true;
+      pos = newpos+4;
     }
   }
-  
 
-  if(doing == false){
-    input.erase(it,input.end());
+  if(doing == true){
+
+    sequence.append(input.begin() + pos, input.end());
   }
-  std::cerr << input << "\n";
 
-  return input;  
+  return sequence;
 }
 
 int main() {
