@@ -10,12 +10,23 @@ std::string active(const std::string& input){
 
   bool doing = true;
 
-  for(unsigned i = 0; i < input.size(); ++i){
-
-    if(i < input.size() - 4 && i == 'd' && doing == true)
+  while((doing == true && input.find("don't()", pos) != std::string::npos) || (doing == false && input.find("do()", pos) != std::string::npos)){
 
     
-    
+    if(doing == true){
+
+      int newpos = input.find("don't()", pos);
+      sequence.append(input.begin() + pos, input.begin() + newpos);//wonky
+
+      doing = false;
+      pos = newpos+7;
+    }
+    else{
+
+      int newpos = input.find("do()", pos);
+      doing = true;
+      pos = newpos+4;
+    }
   }
 
   if(doing == true){
