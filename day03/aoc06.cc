@@ -1,216 +1,84 @@
 #include <iostream>
-#include <string>
 #include <sstream>
+#include <string>
+#include <regex>
 
-std::string active(const std::string& input){
-
+std::string active(const std::string& input) {
   std::string sequence;
-
-  int pos = 0;
 
   bool doing = true;
 
-  for(unsigned i = 0; i < input.size(); ++i){
+  for (unsigned i = 0; i < input.size(); ++i) {
+    std::string substring = input.substr(i);
 
-    if(i < input.size() - 4 && i == 'd' && doing == true)
-
-    
-    
+    if (doing == true && substring.starts_with("don't()") == false) {
+      sequence.push_back(input.at(i));
+    } else if (doing == true && substring.starts_with("don't()") == true) {
+      doing = false;
+    } else if (doing == false && substring.starts_with("do()") == true) {
+      doing = true;
+    } else {
+      continue;
+    }
   }
-
-  if(doing == true){
-
-    sequence.append(input.begin() + pos, input.end());
-  }
-
+  std::cerr << sequence << std::endl;
   return sequence;
 }
 
-int main() {
-  int sum = 0;
 
+std::string getinput(){
   std::string input;
-  
-  while(std::getline(std::cin, input)){
 
-    std::string sequence = active(input);
-    //std::string sequence = input;
+  char c;
+  while(std::cin.get(c)){
+    input.push_back(c);
+  }
+  return input;
+}
 
-    
-    char li;
-    char lii;
-    char liii;
-    char ri;
-    char rii;
-    char riii;
 
-    std::string::iterator it = sequence.begin();
+/*
+int sum(std::string& sq){
 
-    while (it != sequence.end()) {
-      if (*it == 'm' && it + 1 != sequence.end()) {
-        ++it;
-        if (*it == 'u' && it + 1 != sequence.end()) {
-          ++it;
+  int s = 0;
+  std::regex pattern("^mul\\([0-999]\\,[0-999]\\)");
 
-          if (*it == 'l' && it + 1 != sequence.end()) {
-            ++it;
+  for(unsigned i = 0; i < sq.size(); ++i){
 
-            if (*it == '(' && it + 1 != sequence.end()) {
-              ++it;
+    std:: string substring = sq.substr(i);
 
-              if (*it >= '0' && *it <= '9' && it + 1 != sequence.end()) {
-                li = *it;
-                ++it;
-
-                if (*it >= '0' && *it <= '9' && it + 1 != sequence.end()) {
-                  lii = *it;
-                  ++it;
-
-                  if (*it >= '0' && *it <= '9' && it + 1 != sequence.end()) {
-                    liii = *it;
-                    ++it;
-
-                    if (*it == ',' && it + 1 != sequence.end()) {
-                      ++it;
-
-                      if (*it >= '0' && *it <= '9' && it + 1 != sequence.end()) {
-                        ri = *it;
-                        ++it;
-
-                        if (*it >= '0' && *it <= '9' && it + 1 != sequence.end()) {
-                          rii = *it;
-                          ++it;
-
-                          if (*it >= '0' && *it <= '9' && it + 1 != sequence.end()) {
-                            riii = *it;
-                            ++it;
-
-                            // mul(abc,xyz)
-                            if (*it == ')') {
-                              int numl = (li - 48) * 100 + (lii - 48) * 10 + (liii - 48);
-                              int numr = (ri - 48) * 100 + (rii - 48) * 10 + (riii - 48);
-
-                              sum += (numl * numr);
-                            }
-
-                          }  // mul(abc,xy)
-                          else if (*it == ')') {
-                            
-                            int numl = (li - 48) * 100 + (lii - 48) * 10 + (liii - 48);
-                            int numr = (ri - 48) * 10 + (rii - 48);
-
-                            sum += (numl * numr);
-                          }
-
-                        }  // mul(abc,x)
-                        else if (*it == ')') {
-
-                          int numl = (li - 48) * 100 + (lii - 48) * 10 + (liii - 48);
-                          int numr = (ri - 48);
-
-                          sum += (numl * numr);
-                        }
-                      }
-                    }
-
-                  }  // mul(ab,...
-                  else if (*it == ',' && it + 1 != sequence.end()) {
-                    ++it;
-
-                    if (*it >= '0' && *it <= '9' && it + 1 != sequence.end()) {
-                      ri = *it;
-                      ++it;
-
-                      if (*it >= '0' && *it <= '9' && it + 1 != sequence.end()) {
-                        rii = *it;
-                        ++it;
-
-                        if (*it >= '0' && *it <= '9' && it + 1 != sequence.end()) {
-                          riii = *it;
-                          ++it;
-
-                          // mul(ab,xyz)
-                          if (*it == ')') {
-                            
-                            int numl = (li - 48) * 10 + (lii - 48);
-                            int numr = (ri - 48) * 100 + (rii - 48) * 10 + (riii - 48);
-
-                            sum += (numl * numr);
-                          }
-
-                        }  // mul(ab,xy)
-                        else if (*it == ')') {
-
-                          int numl = (li - 48) * 10 + (lii - 48);
-                          int numr = (ri - 48) * 10 + (rii - 48);
-
-                          sum += (numl * numr);
-                        }
-
-                      }  // mul(ab,x)
-                      else if (*it == ')') {
-
-                        int numl = (li - 48) * 10 + (lii - 48);
-                        int numr = (ri - 48);
-
-                        sum += (numl * numr);
-                      }
-                    }
-                  }
-
-                }  // mul(a,...
-                else if (*it == ',' && it + 1 != sequence.end()) {
-                  ++it;
-
-                  if (*it >= '0' && *it <= '9' && it + 1 != sequence.end()) {
-                    ri = *it;
-                    ++it;
-
-                    if (*it >= '0' && *it <= '9' && it + 1 != sequence.end()) {
-                      rii = *it;
-                      ++it;
-
-                      if (*it >= '0' && *it <= '9' && it + 1 != sequence.end()) {
-                        riii = *it;
-                        ++it;
-
-                        // mul(a,xyz)
-                        if (*it == ')') {
-                          int numl = (li - 48);
-                          int numr = (ri - 48) * 100 + (rii - 48) * 10 + (riii - 48);
-
-                          sum += (numl * numr);
-                        }
-
-                      }  // mul(a,xy)
-                      else if (*it == ')') {
-
-                        int numl = (li - 48);
-                        int numr = (ri - 48) * 10 + (rii - 48);
-
-                        sum += (numl * numr);
-                      }
-                    }  // mul(a,x)
-                    else if (*it == ')') {
-
-                      int numl = (li - 48);
-                      int numr = (ri - 48);
-
-                      sum += (numl * numr);
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-      ++it;
+    if(std::regex_match(substring, pattern)){
+      int x = std::stoi()
     }
   }
 
-  //don't()mul(15,10)do()do()don't()mul(5,5)
-  std::cout << "sum " << sum << std::endl;
 
+
+
+
+
+  
+  return s;
+}
+*/
+
+
+
+
+int main() {
+  int s = 0;
+
+  std::string input = getinput();
+  std::cerr << input << std::endl;
+
+  //std::string sequence = input;
+  std::string sequence = active(input);
+
+  std::cout << sequence << std::endl;
+  //s = sum(sequence);
+  
+  //std::cout << s << std::endl;
   return 0;
 }
+
+

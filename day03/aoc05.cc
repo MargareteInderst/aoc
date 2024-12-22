@@ -180,7 +180,7 @@ int main() {
           }
         }
       }
-    }
+    }  
   }
 
   std::cout << " " << sum << std::endl;
