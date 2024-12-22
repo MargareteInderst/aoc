@@ -4,6 +4,9 @@
 #include <sstream>
 #include <algorithm>
 
+//i need to change getupperInput and makeorder because they assume that we have a input where we get informations for every combination
+//for example 11|22 22|33 11|33 instead of just 11|22 22|33
+
 std::vector<int> getupperInput(){
 
   std::string line;
@@ -15,7 +18,7 @@ std::vector<int> getupperInput(){
     if(line.empty()){
       break;
     }
-
+    //std::cerr << line << std::endl;
     upperInput.push_back(std::stoi(line));    
   }
 
@@ -67,7 +70,7 @@ std::vector<std::vector<int>> getlowerInput(){
 
 int numberofpages(std::vector<int>& upperInput){
 
-  int n = (1 + sqrt(1+8*upperInput.size()))/2;
+  int n = (2 + sqrt(1+8*upperInput.size()))/2;
 
   return n;
 }
@@ -86,13 +89,13 @@ std::vector<int> makeorder(std::vector<int>& upperInput, int n){
     order.at(n-c-1) = upperInput.at(i);
   }
 
-  /*
+  
   for(unsigned i = 0; i < order.size(); ++i){
     
     std::cerr << order.at(i) << " ";
   }
   std::cerr << std::endl;
-  */
+  
 
   return order;
 }
@@ -127,6 +130,7 @@ int makeSum(std::vector<int>& order, std::vector<std::vector<int>>& lowerInput){
       sum += middle;
       //std::cerr << middle << std::endl;
     }
+    correct = true;
   }
 
   return sum;
